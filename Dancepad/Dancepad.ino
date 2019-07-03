@@ -1,6 +1,5 @@
 // Sketch for In The Groove play on FSR pad
 // You will need an Arduino with access to the keyboard library
-// If you need any help or assistance, you can contact me personally @ nidyz#0357 on discord
 
 // This code was written with example code from the Adafruit FSR tutorial
 // https://learn.adafruit.com/force-sensitive-resistor-fsr/using-an-fsr
@@ -9,9 +8,10 @@
 #include <Keyboard.h>
 
 // FSR connection variables
+// These numbers correlate to the analog inputs on the arduino
 int fsrPinDownArrow = 2;   
 int fsrPinUpArrow = 0;
-int fsrPinLeftArrow = 3;
+int fsrPinLeftArrow = 4;
 int fsrPinRightArrow = 1;
 
 // The reading variables for each arrow
@@ -21,25 +21,18 @@ int fsrReadingLeftArrow;
 int fsrReadingRightArrow;  
 
 // The sensitivity at wich arrows activate, change to a lower number for a higher sensitivity
-// Note: this sensitivity is NOT linear
-int fsrActivateDownArrow = 955; 
-int fsrActivateRightArrow = 975; 
-int fsrActivateLeftArrow = 980; 
-int fsrActivateUpArrow = 920;   
+int fsrActivateDownArrow = 955;
+int fsrActivateRightArrow = 995;
+int fsrActivateLeftArrow = 973;
+int fsrActivateUpArrow = 920;
 
-// Keystrokes that the arrows send out
-char upArrow = 'i';
-char leftArrow = 'j';
-char rightArrow = 'l';
-char downArrow = 'k';
-
-//setup
+// Setup
 void setup(void) 
 {   
   Keyboard.begin();
 }
 
-//runtime loop
+// Runtime loop
 void loop(void) 
 {
  //instances of fsrReading
@@ -47,45 +40,48 @@ void loop(void)
  fsrReadingUpArrow = analogRead(fsrPinUpArrow);
  fsrReadingLeftArrow = analogRead(fsrPinLeftArrow);
  fsrReadingRightArrow = analogRead(fsrPinRightArrow);
-
+ 
  // if statement that sends the keystroke for the UP arrow
  if (fsrReadingUpArrow > fsrActivateUpArrow) 
  {
-    Keyboard.press(upArrow);
+    Keyboard.press(KEY_UP_ARROW);
  }
- else 
+ // Releases the UP arrow if the sensitivity is smaller than (activation point - 10)
+ else if (fsrReadingUpArrow < fsrActivateUpArrow - 10)
  {
-    Keyboard.release(upArrow);
+    Keyboard.release(KEY_UP_ARROW);
  }
 
  // if statement that sends the keystroke for the LEFT arrow
  if (fsrReadingLeftArrow > fsrActivateLeftArrow) 
  {
-    Keyboard.press(leftArrow);
+    Keyboard.press(KEY_LEFT_ARROW);
  }
- else 
+ // Releases the LEFT arrow if the sensitivity is smaller than (activation point - 10)
+ else if (fsrReadingLeftArrow < fsrActivateLeftArrow - 10)
  {
-    Keyboard.release(leftArrow);
+    Keyboard.release(KEY_LEFT_ARROW);
  }
 
  // if statement that sends the keystroke for the RIGHT arrow
  if (fsrReadingRightArrow > fsrActivateRightArrow) 
  {
-    Keyboard.press(rightArrow);
+    Keyboard.press(KEY_RIGHT_ARROW);
  }
- else 
+ // Releases the RIGHT arrow if the sensitivity is smaller than (activation point - 10)
+ else if (fsrReadingRightArrow < fsrActivateRightArrow - 10)
  {
-    Keyboard.release(rightArrow);
+   Keyboard.release(KEY_RIGHT_ARROW);
  }
 
  // if statement that sends the keystroke for the DOWN arrow
  if (fsrReadingDownArrow > fsrActivateDownArrow) 
  {
-    Keyboard.press(downArrow);
+   Keyboard.press(KEY_DOWN_ARROW);
  }
- else 
+ // Releases the DOWN arrow if the sensitivity is smaller than (activation point - 10)
+ else if (fsrReadingDownArrow < fsrActivateDownArrow - 10)
  {
-    Keyboard.release(downArrow);
+   Keyboard.release(KEY_DOWN_ARROW);
  }
-  
 }
